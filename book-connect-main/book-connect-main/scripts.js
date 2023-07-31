@@ -4,6 +4,8 @@ document.addEventListener('DOMContentLoaded', function () {
   const booksPerPage = BOOKS_PER_PAGE;
   let currentOverlay = null; // Variable to keep track of the currently open overlay
 
+
+  //date for book
   function createPreview(book, authors) {
     const { author, image, title, id, published } = book;
     const publicationDate = new Date(published).toLocaleString('en-US', {
@@ -11,6 +13,8 @@ document.addEventListener('DOMContentLoaded', function () {
       month: 'long',
     });
 
+
+    //set up class book system
     const preview = document.createElement('button');
     preview.classList = 'preview';
     preview.setAttribute('data-preview', id);
@@ -26,6 +30,8 @@ document.addEventListener('DOMContentLoaded', function () {
     return preview;
   }
 
+
+  // make sure overlay works
   function showBookDetails(event) {
     // Check if there is an existing overlay
     if (currentOverlay) {
@@ -96,7 +102,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   const fragment = document.createDocumentFragment();
   const extracted = books.slice(0, booksPerPage);
-
+//getting var from data.js
   for (const { author, image, title, id } of extracted) {
     const preview = createPreview({ author, image, title, id }, authors);
     fragment.appendChild(preview);
@@ -105,6 +111,8 @@ document.addEventListener('DOMContentLoaded', function () {
   let sender = document.querySelector('[data-list-items]');
   sender.appendChild(fragment);
 
+
+  //sorting system
   const genresFragment = document.createDocumentFragment();
   let element = document.createElement('option');
   element.value = 'any';
@@ -134,7 +142,7 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   document.querySelector('[data-search-authors]').appendChild(authorsFragment);
-
+//changes theme
   const userPrefersDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
   const theme = userPrefersDarkMode ? 'night' : 'day';
 
@@ -147,6 +155,8 @@ document.addEventListener('DOMContentLoaded', function () {
     document.documentElement.style.setProperty('--color-light', css[selectedTheme].light);
   }
 
+
+  //to display the needed overlay using functions
   function showSettingsDialog() {
     const settingsDialog = document.querySelector('[data-settings-overlay]');
     if (settingsDialog) {
@@ -165,7 +175,7 @@ document.addEventListener('DOMContentLoaded', function () {
   if (settingsButton) {
     settingsButton.addEventListener('click', showSettingsDialog);
   }
-
+//formating date to work correctly when displaying
   const settingsForm = document.querySelector('[data-settings-form]');
   if (settingsForm) {
     settingsForm.addEventListener('submit', (event) => {
@@ -183,10 +193,11 @@ document.addEventListener('DOMContentLoaded', function () {
   if (cancelButton) {
     cancelButton.addEventListener('click', closeSettingsDialog);
   }
-
+//making sure the show butto works by doing simple faraction math
   document.querySelector('[data-list-button]').textContent = `Show more (${matches.length - (page * booksPerPage) > 0 ? matches.length - (page * booksPerPage) : 0})`;
   document.querySelector('[data-list-button]').disabled = !(matches.length - page * booksPerPage > 0);
 
+  //listiners
   const previews = document.querySelectorAll(".preview");
   previews.forEach(preview => {
     preview.addEventListener('click', showBookDetails);
@@ -228,13 +239,15 @@ document.addEventListener('DOMContentLoaded', function () {
 
   document.querySelector('[data-list-items]').addEventListener('click', showBookDetails);
 
+
+  //input for search algorythem
   document.querySelector('[data-search-form]').addEventListener('submit', (event) => {
     event.preventDefault();
     const formData = new FormData(event.target);
     const filters = Object.fromEntries(formData);
     const result = [];
 
-    for (const book of books) {
+    for (const book of books) {                                     //no case sencativity
       const titleMatch = filters.title.trim() === '' || book.title.toLowerCase().includes(filters.title.toLowerCase());
       const authorMatch = filters.author === 'any' || book.author === filters.author;
       let genreMatch = filters.genre === 'any';
@@ -252,7 +265,7 @@ document.addEventListener('DOMContentLoaded', function () {
         result.push(book);
       }
     }
-
+// console conformation
     console.clear();
     console.warn('Searching in progress...');
     if (result.length < 1) {
@@ -262,6 +275,8 @@ document.addEventListener('DOMContentLoaded', function () {
       document.querySelector('[data-list-message]').classList.remove('list__message_show');
       console.warn('Found Items');
     }
+
+    //displaying small preview for user so that the image and ame are there for the user
 
     document.querySelector('[data-list-items]').innerHTML = '';
     const fragment = document.createDocumentFragment();
@@ -285,6 +300,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
     document.querySelector('[data-list-items]').appendChild(fragment);
 
+
+    //showmore call
     const initial = result.length - (page * booksPerPage);
     const remaining = initial > 0 ? initial : 0;
     document.querySelector('[data-list-button]').disabled = initial <= 0;
@@ -298,6 +315,8 @@ document.addEventListener('DOMContentLoaded', function () {
     document.querySelector('[data-search-overlay]').open = false;
   });
 
+
+  //book click call overlay
   document.querySelector('[data-search-overlay]').addEventListener('click', (event) => {
     if (event.target === document.querySelector('[data-search-overlay]')) {
       document.querySelector('[data-search-overlay]').open = false;
