@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', function () {
   let matches = books;
   let page = 1;
-  const booksPerPage = 36;
+  const booksPerPage = BOOKS_PER_PAGE;
   let currentOverlay = null; // Variable to keep track of the currently open overlay
 
   function createPreview(book, authors) {
