@@ -5,8 +5,9 @@ document.addEventListener('DOMContentLoaded', function () {
   let currentOverlay = null; // Variable to keep track of the currently open overlay
 
 
-  //date for book
+  //book preview creation
   function createPreview(book, authors) {
+    //for specific book
     const { author, image, title, id, published } = book;
     const publicationDate = new Date(published).toLocaleString('en-US', {
       year: 'numeric',
@@ -30,7 +31,7 @@ document.addEventListener('DOMContentLoaded', function () {
     return preview;
   }
 
-
+  //show book details
   // make sure overlay works
   function showBookDetails(event) {
     // Check if there is an existing overlay
@@ -100,9 +101,11 @@ document.addEventListener('DOMContentLoaded', function () {
     },
   };
 
+
+  //books shown per page
   const fragment = document.createDocumentFragment();
   const extracted = books.slice(0, booksPerPage);
-//getting var from data.js
+  //getting var from data.js
   for (const { author, image, title, id } of extracted) {
     const preview = createPreview({ author, image, title, id }, authors);
     fragment.appendChild(preview);
@@ -112,7 +115,7 @@ document.addEventListener('DOMContentLoaded', function () {
   sender.appendChild(fragment);
 
 
-  //sorting system
+  //Search Algorithm
   const genresFragment = document.createDocumentFragment();
   let element = document.createElement('option');
   element.value = 'any';
@@ -142,7 +145,7 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   document.querySelector('[data-search-authors]').appendChild(authorsFragment);
-//changes theme
+  //Theme Change
   const userPrefersDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
   const theme = userPrefersDarkMode ? 'night' : 'day';
 
@@ -175,7 +178,7 @@ document.addEventListener('DOMContentLoaded', function () {
   if (settingsButton) {
     settingsButton.addEventListener('click', showSettingsDialog);
   }
-//formating date to work correctly when displaying
+  //Theme selector
   const settingsForm = document.querySelector('[data-settings-form]');
   if (settingsForm) {
     settingsForm.addEventListener('submit', (event) => {
@@ -187,17 +190,17 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-//
+  //
 
   const cancelButton = document.querySelector('[data-settings-cancel]');
   if (cancelButton) {
     cancelButton.addEventListener('click', closeSettingsDialog);
   }
-//making sure the show butto works by doing simple faraction math
+  //making sure the show butto works by doing simple faraction math
   document.querySelector('[data-list-button]').textContent = `Show more (${matches.length - (page * booksPerPage) > 0 ? matches.length - (page * booksPerPage) : 0})`;
   document.querySelector('[data-list-button]').disabled = !(matches.length - page * booksPerPage > 0);
 
-  //listiners
+  //Event listiners
   const previews = document.querySelectorAll(".preview");
   previews.forEach(preview => {
     preview.addEventListener('click', showBookDetails);
@@ -229,7 +232,7 @@ document.addEventListener('DOMContentLoaded', function () {
     if (currentOverlay) {
       document.body.removeChild(currentOverlay);
       document.body.removeChild(document.querySelector('.backdrop'));
-      currentOverlay=''
+      currentOverlay = ''
     }
   });
 
@@ -265,7 +268,7 @@ document.addEventListener('DOMContentLoaded', function () {
         result.push(book);
       }
     }
-// console conformation
+    // console conformation
     console.clear();
     console.warn('Searching in progress...');
     if (result.length < 1) {
