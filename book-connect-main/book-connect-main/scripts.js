@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', function () {
       document.body.removeChild(document.querySelector('.backdrop'));
       currentOverlay = null;
     }
-
+//close and reopen with new book info
     const previewButton = event.target.closest('.preview');
     if (!previewButton) return;
 
@@ -89,7 +89,7 @@ document.addEventListener('DOMContentLoaded', function () {
     document.body.appendChild(backdrop);
   }
 
-
+//given
   const css = {
     day: {
       dark: '10, 10, 20',
